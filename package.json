@@ -1,0 +1,21 @@
+{
+  "name": "node_hexo",
+  "version": "1.0.0",
+  "description": "zheshi yige meili de cuowu",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "liufulin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "favicon": "0.0.2",
+    "gray-matter": "^3.1.1",
+    "jade": "^1.11.0",
+    "markdown": "^0.5.0",
+    "static": "^2.0.0"
+  }
+}
