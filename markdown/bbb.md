@@ -1,24 +1,19 @@
 ---
 title: 初步都是
 date: 2017-11-07 15:20:55
-tags: [webworker,H5]
-categories: [实践, 垃圾]
+tags: [html, node]
+categories: [实践, 后端]
 ---
 
->前言：阿斯顿法国规划局快乐，可惜java和javascript的关系就好比雷锋
+>前言：一直都觉得
 
 #### js的单线程特性
+<!-- more -->
+JavaScript引擎
 
-JavaScript引擎是单线程运行的，J按时发达的萨芬的I跟雷峰塔的关系
 
-
-``` js
-var worker = new Worker("worker.js");
-worker.postMessage(data);
-worker.onmessage = function(ev){
-	var data = ev.data;
-};
-
+```js
+var arr2 = new Array()
 ```
 
 ##### [案例源码地址](https://github.com/formattedzzz/H5-web-Worker-exploer)

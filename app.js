@@ -1,77 +1,60 @@
 
-let path = require('path')
+var express = require('express')
 
-let md = require('markdown').markdown
+var path = require('path')
 
-let matter = require('gray-matter')
+var cookieParser = require('cookie-parser')
 
-let fs = require('fs')
+var bodyParser = require('body-parser')
 
-let postpath = path.resolve(__dirname, 'markdown')
+var {totalData, mdDatas, Tags, Cates} = require('./yield.js')
 
-let excerpt_sign = require('./config.js').excerpt_sign
+var app = express()
 
-let excerpt_num = require('./config.js').excerpt_num
+var router = express.Router()
 
-// let filelist =  fs.readdirSync(mdpath)
+app.set('views', path.join(__dirname, 'views'))
 
-// console.log(filelist)
+app.set('view engine', 'jade')
 
-let postArr = []
+app.use(bodyParser.urlencoded({extended:false}))
 
-let excerptor = function(file, options) { 
-	file.excerpt = file.content.substr(0, excerpt_num)
-}
+app.use(bodyParser.json())
 
-let filelist = fs.readdirSync(postpath)
-//读取markdown文件夹下所有md文件的文件名
+app.use(cookieParser())
 
-filelist.forEach(function (file) {
+app.all('*', function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'x-Request-with')
+    res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
+    res.header('X-Powered-By', '4.15.2')
+    res.header('Content-Type', 'application/json;charset=utf-8')
+    next()  
+})
+app.use(express.static(path.join(__dirname, 'public')))
 
-	let mdpath = path.join(postpath, file)
 
-	let raw = fs.readFileSync(mdpath, 'utf-8')
-
-	let filename = file.substr(0, file.length - 3)
-	// console.log(raw)
-	let re = new RegExp(excerpt_sign)
-	
-	let options = null 
-
-	if (re.test(raw)) {
-		options = {excerpt_separator: excerpt_sign}
-	} else {
-		options = {excerpt: excerptor}
-	}
-
-	// console.log(options)
-
-	let mdobj = matter(raw, options)
-
-	let mdhtml = md.toHTML(raw)
-
-	postArr.push({name: filename,mdobj, mdhtml})
-
+app.get('/tags', function(req, res){
+    res.json({
+        code: 200,
+        message:'获取标签归档成功',
+        data: Tags
+    })
 })
 
-if(!fs.existsSync(__dirname + 'dist')){
-	fs.mkdirSync('./dist')
-	// console.log('已经存在') fs.existss已经废弃，无法判断
-}
-if(!fs.existsSync(__dirname + 'data')){
-	fs.mkdirSync('./data')
-}
-
-postArr.forEach(function(post){
-
-	let newpath = path.join(__dirname, 'dist', post.name+'.html')
-
-	fs.writeFileSync(newpath, post.mdhtml, 'utf-8')
-
-	let newpath2 = path.join(__dirname, 'data', post.name+'.js')
-
-	fs.writeFileSync(newpath2, 'module.exports = exports = '+ JSON.stringify(post.mdobj), 'utf-8')
-
+app.get('/cates', function(req, res){
+    res.json({
+        code: 200,
+        message:'获取分类归档成功',
+        data: Cates
+    })
 })
-
-//下一步工作，遍历data文件夹，生成不同标签、日期对应的文章数据结构
+// console.log(Cates)
+app.listen(3000, function(err){
+    if (err) {
+        console.log(err)
+    } else {
+         console.log('node is ok')
+    }
+   
+})
